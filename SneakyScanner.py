@@ -77,12 +77,13 @@ monitored_ips = set()
 
 
 def arp_monitor_callback(pkt):
-    if ARP in pkt and pkt[ARP].op == 2:  # is-at
+    if ARP in pkt and pkt[ARP].op == 1:  # who-is
         monitored_macs.add(pkt[Ether].src)
         monitored_ips.add(pkt[ARP].psrc)
 
 
-sniff_timeout = int(input('G2) How long (in seconds) do you want to sniff? Please enter an integer: '))
+sniff_timeout = int(input('G2) How long (in seconds) do you want to sniff (passively scan) for hosts in the LAN? '
+                          'Please enter an integer: '))
 sniff(prn=arp_monitor_callback, filter="arp", store=1, timeout=sniff_timeout)
 num_monitored_macs = len(monitored_macs)
 num_monitored_ips = len(monitored_ips)
